@@ -1,5 +1,15 @@
 # Wrap DLL
 
+This is a fork of [mavenlin/wrap_dll](https://github.com/mavenlin/wrap_dll).
+
+```
+There are made small changes to make the script compatible with certain undecorated c++ Dlls that has overloaded functions.
+
+It has only been tested on the file used for my project and is not guaranteed to work on other dll files.
+
+The rest of this readme is from the origianl repository.
+```
+
 A tool to automatically generate cpp/asm codes for wrapping a dynamic-link library.
 
 ## Features
@@ -24,10 +34,10 @@ currently there's only `jinja2` for rendering the code templates.
 
 Make sure you installed Visual Studio, the script by default assumes the `dumpbin.exe` and `undname.exe` tools are available in the `PATH`. Mine is located at `C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.27.29110\bin\Hostx64\x64\`, so add it to your path. Otherwise pass the `--dumpbin` and `--undname` arguments.
 
-
 ## Example
 
 ### x64 DLL
+
 ```shell
 python3 wrap_dll.py C:\Windows\System32\AudioSes.dll
 cd AudioSes
@@ -35,12 +45,15 @@ cmake -f CMakeLists.txt
 ```
 
 ### x86 DLL
+
 ```shell
 python3 wrap_dll.py C:\Windows\SysWOW64\AudioSes.dll
 cd AudioSes
 cmake -f CMakeLists.txt
 ```
+
 ### Override some of the exported functions
+
 To override some of the functions, provide a `hook.h` file.
 
 Say if we wrap `abc_dll.dll` with the function `int abc(const char* a, int b, float c)`, override it in the `hook.h` with
@@ -80,6 +93,7 @@ This tool seems to be useful for some people, as I saw a few forks recently.
 Therefore I performed a major refactor to make the code more professional.
 
 Changes:
+
 - Remove the `dumpbin.exe` included, the user can specify their own `dumpbin.exe` that comes with their visual studio installation. e.g. Mine is located at `C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.27.29110\bin\Hostx64\x64\dumpbin.exe`. The script by default assumes `dumpbin.exe` is available in the user's `PATH`.
 - Use `cmake` to generate visual studio solution file.
 - Use `jinja2` to separate the `c++/asm` code into independent template files.

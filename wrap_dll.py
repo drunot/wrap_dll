@@ -130,8 +130,20 @@ if __name__ == "__main__":
   ordinals = [ordinal for ordinal, _ in ordinal_name_pairs]
   names = [name for _, name in ordinal_name_pairs]
   undecorated_names = undecorate(names)
-  ordinal_and_names = list(zip(ordinals, names, undecorated_names))
-
+  und_cpp = [False for x in range(len(names))] 
+  for num, name in enumerate(names):
+    l = name.split("@");
+    if(len(l) == 2):
+      und_cpp[num] = True
+      print(l[0])
+      res = [x for x in range(len(names)) if names[x] == l[0]]
+      print(res)
+      if(len(res) > 0):
+        for i in res:
+          und_cpp[i] = True
+  ordinal_and_names = list(zip(ordinals, names, undecorated_names, und_cpp))
+  print(ordinal_and_names)
+  print(names)
   if not args.dry:
     if args.force:
       if os.path.exists(dll_name):
@@ -145,6 +157,8 @@ if __name__ == "__main__":
       from pathlib import Path
       Path(f"{dll_name}/empty.h").touch()
     shutil.copy("hook_macro.h", f"{dll_name}/")
+  # Hack to check if undecorated c++
+
 
   # write files
   def_content = def_template.render(ordinal_and_names=ordinal_and_names)
